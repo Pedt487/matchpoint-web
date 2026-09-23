@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.matchpoint.mobile",
+      "sha256_cert_fingerprints": [
+        "40:8B:B5:38:63:22:C0:80:DB:98:BD:C1:DF:6B:36:C1:1F:FE:6B:BB:03:77:B7:E5:AC:21:E5:A3:F0:C0:9F:78"
+      ]
+    }
+  }
+]

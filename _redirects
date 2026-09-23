@@ -1,0 +1,5 @@
+# Cloudflare Pages / Netlify: die App-Pfade landen auf ihrer Landeseite,
+# die aus dem Pfad die Kennung liest und weiterleitet (Status 200 = Rewrite).
+/oetv/*  /oetv/index.html  200
+/t/*     /oetv/index.html  200
+/c/*     /c/index.html     200

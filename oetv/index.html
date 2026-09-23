@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turnier – MatchPoint</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+         background: #0C1424; color: #fff; font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; }
+  main { width: min(440px, calc(100% - 32px)); padding: 32px 0; }
+  .kicker { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #7E8CA8; margin: 0 0 8px; }
+  h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: -0.01em; }
+  p { color: #A7B4CA; line-height: 1.5; margin: 0 0 22px; }
+  a.btn { display: block; box-sizing: border-box; width: 100%; padding: 14px 16px; margin: 10px 0; border-radius: 12px;
+          text-decoration: none; text-align: center; font-weight: 700; color: #fff; background: #273349; border: 1px solid #33415F; }
+  a.btn.primary { background: #fff; color: #0C1424; border-color: #fff; }
+  hr { border: 0; border-top: 1px solid #33415F; margin: 26px 0 16px; }
+  .stores a.btn { padding: 12px 16px; font-weight: 600; }
+  small { display: block; margin-top: 20px; color: #7E8CA8; }
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Turnier · ÖTV</p>
+  <h1>Alles zum Turnier</h1>
+  <p>Ausschreibung, Bewerbe und Meldelisten stehen beim ÖTV. Mit MatchPoint siehst du dazu, wer im Feld steht und ob es für dich passt.</p>
+  <a class="btn primary" id="oetv" href="https://www.oetv.at/turniere">Beim ÖTV ansehen</a>
+  <a class="btn" id="app" href="matchpoint://">In MatchPoint öffnen</a>
+  <hr>
+  <p>Noch kein MatchPoint?</p>
+  <div class="stores">
+    <a class="btn" href="https://apps.apple.com/at/app/matchpoint-tennis-scoring/id6797866800">iPhone – App Store</a>
+    <a class="btn" href="https://play.google.com/store/apps/details?id=app.matchpoint.mobile">Android – Google Play</a>
+  </div>
+  <small>Nach dem Installieren öffnet dieser Link das Turnier direkt in der App.</small>
+</main>
+<script>
+  // Der Pfad ist /oetv/<id> oder /t/<id>; die Kennung ist die des ÖTV-Kalenders.
+  // Die Kennung kommt aus dem Pfad (/oetv/<id>) oder, wenn die
+  // Auffangseite weitergereicht hat, aus der Abfrage (?id=<id>).
+  var teile = location.pathname.split('/').filter(Boolean);
+  var id = teile.length >= 2 ? decodeURIComponent(teile[1])
+         : new URLSearchParams(location.search).get('id');
+  if (id) {
+    document.getElementById('oetv').href = 'https://www.oetv.at/turniere/' + encodeURIComponent(id);
+    document.getElementById('app').href = 'matchpoint://oetv/' + encodeURIComponent(id);
+  }
+</script>
+</body>
+</html>

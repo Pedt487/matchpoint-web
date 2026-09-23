@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["4MJNJA88A4.app.matchpoint.mobile"],
+        "components": [
+          { "/": "/c/*", "comment": "Einladungscode (app/c/[code].tsx)" },
+          { "/": "/oetv/*", "comment": "Turnierakte (app/oetv/[id].tsx)" },
+          { "/": "/t/*", "comment": "Kurzform der Turnierakte, web/oetv/index.html leitet um" }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["4MJNJA88A4.app.matchpoint.mobile"]
+  }
+}
