@@ -17,23 +17,60 @@ werden, und den kann WhatsApp nicht antippen (PO 22.09.2026: „dann erstmal
 raus damit"). Seit demselben Tag will auch „Turnier teilen" einen Link, den
 jeder öffnen kann — mit App in MatchPoint, ohne App beim ÖTV.
 
-## Ausrollen (einmalig, ~30 Minuten)
+## Wo das liegt (seit 23.09.2026 live)
 
-Jeder statische Host geht. Der Ordner ist für **Cloudflare Pages** oder
-**Netlify** vorbereitet (`_headers`, `_redirects`); bei Cloudflare:
+**Host: GitHub Pages**, Repository `github.com/Pedt487/matchpoint-web`
+(öffentlich — Pages verweigert auf diesem Konto sonst den Dienst, `422 Your
+current plan does not support GitHub Pages for this repository`). Der Inhalt
+wird **hier** gepflegt und dorthin gespiegelt:
 
-1. Pages → *Create a project* → dieses Repo, **Root directory `web`**, kein
-   Build-Befehl, Output `/`.
-2. *Custom domains* → `matchpoint.lol` (und `www`), DNS-Einträge übernehmen
-   lassen. HTTPS kommt von Cloudflare.
-3. Prüfen — beide müssen `200`, `Content-Type: application/json` und **keine
-   Weiterleitung** liefern:
+    rm -rf <arbeitskopie> && cp -r web/. <arbeitskopie>/ && cd <arbeitskopie>
+    git add -A && git commit && git push
 
-       curl -sI https://matchpoint.lol/.well-known/apple-app-site-association
-       curl -sI https://matchpoint.lol/.well-known/assetlinks.json
+**DNS bei Porkbun**, und zwar skriptbar: `PORKBUN_API_KEY` und
+`PORKBUN_SECRET_KEY` stehen in der Repo-`.env`. Gesetzt sind vier A-Records
+auf `185.199.108-111.153` und `www` als CNAME auf `pedt487.github.io`. Der
+frühere ALIAS auf die Parkseite (`pixie.porkbun.com`) ist weg. **Die sieben
+Mail-Einträge (MX, SPF, DKIM für Resend, DMARC) bleiben unberührt** — wer hier
+etwas ändert, prüft das vorher im Probelauf.
 
-   Apple holt die Datei über sein CDN; bis zu 24 h nach der ersten
-   Installation der App. Google prüft beim Installieren bzw. Aktualisieren.
+Prüfen:
+
+    curl -sI https://matchpoint.lol/.well-known/apple-app-site-association
+    curl -sI https://matchpoint.lol/.well-known/assetlinks.json
+
+Apple holt die Datei über sein CDN; bis zu 24 h nach der ersten Installation
+der App. Google prüft beim Installieren bzw. Aktualisieren.
+
+### Zwei Eigenheiten von GitHub Pages
+
+- **`_headers` und `_redirects` wirken NICHT.** Das sind Cloudflare- und
+  Netlify-Dateien; sie liegen weiter hier, falls der Host wechselt. Statt der
+  Rewrites fängt `404.html` die Pfade `/oetv/<id>`, `/t/<id>` und `/c/<code>`
+  ab und reicht sie an die Landeseiten weiter. Die Adresse bleibt auf einer
+  Pages-404-Seite stehen, deshalb ist die Kennung dort noch lesbar.
+- **Die AASA-Datei kommt als `application/octet-stream`**, weil sie keine
+  Endung hat und Pages den Typ aus der Endung ableitet. Apple verlangt
+  `application/json`. Ob es trotzdem funktioniert, zeigt erst die erste
+  Installation auf einem iPhone. Wenn nicht, ist der Ausweg Cloudflare Pages,
+  wo `_headers` greift — DNS ist eine Minute Arbeit.
+
+`.nojekyll` muss bleiben: Jekyll überspringt Punktordner, `.well-known` wäre
+sonst gar nicht veröffentlicht.
+
+### Die Datenschutzerklärung hat EINE Quelle
+
+`privacy.html` wird **erzeugt**, nicht gepflegt:
+
+    python tools/web_privacy.py
+
+Die Quelle ist `site/privacy.txt` im Supabase-Bucket — dieselbe Adresse, die
+die Stores als `privacyPolicyUrl` führen und die `app/about.tsx` verlinkt
+(`DATENSCHUTZ_URL`). Wer den Text ändert, ändert ihn dort und lässt das Skript
+laufen. Zwei gepflegte Fassungen an zwei Adressen laufen sonst auseinander,
+und genau davor warnt der Kommentar in `about.tsx`.
+
+`terms.html` hat diese Quelle nicht, es gibt sie nur hier.
 
 ## Was vor dem Live-Gang noch fehlt
 
